@@ -14,11 +14,16 @@ class Category extends BaseModel
     }
 
 
-    // Lấy danh mục theo ID
+    // Lấy danh mục theo id
     public function getById($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id_dm = :id";
-        return $this->fetch($sql, [":id" => $id]);
+        $sql = "SELECT * FROM danhmuc WHERE id = :id";
+        return $this->fetch($sql, ['id' => $id]);
+    }
+    public function getByName($name)
+    {
+        $sql = "SELECT * FROM danhmuc WHERE name = :name LIMIT 1";
+        return $this->fetch($sql, [':name' => $name]);
     }
 
     // Tạo mới danh mục
@@ -28,17 +33,20 @@ class Category extends BaseModel
         return $this->execute($sql, [":name" => $name]);
     }
 
-    // Cập nhật danh mục
-    public function updateCategory($id, $name)
-    {
-        $sql = "UPDATE {$this->table} SET name = :name WHERE id_dm = :id";
-        return $this->execute($sql, [":name" => $name, ":id" => $id]);
-    }
-
     // Xóa danh mục
     public function deleteCategory($id)
     {
-        $sql = "DELETE FROM {$this->table} WHERE id_dm = :id";
-        return $this->execute($sql, [":id" => $id]);
+        // Sửa id_dm thành id nếu cột chính của bảng là id
+        $sql = "DELETE FROM danhmuc WHERE id = :id";
+        return $this->execute($sql, ['id' => $id]);
+    }
+
+
+
+    // Cập nhật danh mục
+    public function updateCategory($id, $name)
+    {
+        $sql = "UPDATE danhmuc SET name = :name WHERE id = :id";
+        return $this->execute($sql, ['name' => $name, 'id' => $id]);
     }
 }

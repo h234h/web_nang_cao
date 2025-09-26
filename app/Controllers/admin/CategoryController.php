@@ -29,7 +29,7 @@ class CategoryController extends BaseController
         $this->view("admin/category/form", ["category" => $category]);
     }
 
-    // Lưu dữ liệu (thêm hoặc sửa)
+    // Lưu dữ liệu (thêm hoặc sửa) với kiểm tra trùng tên
     public function save()
     {
         $id = $_POST['id'] ?? null;
@@ -37,6 +37,12 @@ class CategoryController extends BaseController
 
         if (!$name) {
             die("Tên danh mục không được để trống");
+        }
+
+        // Kiểm tra tên danh mục đã tồn tại
+        $existing = $this->category->getByName($name);
+        if ($existing && (!$id || $existing['id'] != $id)) {
+            die("Tên danh mục đã tồn tại: " . htmlspecialchars($name));
         }
 
         if ($id) {
@@ -47,6 +53,7 @@ class CategoryController extends BaseController
 
         $this->redirect("admin/Category/index");
     }
+
 
     // Xóa danh mục
     public function delete($id)

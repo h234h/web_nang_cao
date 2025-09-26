@@ -10,7 +10,8 @@ class BaseController
 
     protected function redirect($url)
     {
-        header("Location: " . Config::BASE_URL . $url);
+        // Dùng BASE_URL đã cấu hình
+        header("Location: " . Config::BASE_URL . "index.php?url=" . $url);
         exit();
     }
 }
