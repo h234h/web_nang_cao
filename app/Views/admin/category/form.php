@@ -1,6 +1,7 @@
 <?php require_once __DIR__ . "/../layouts/header.php"; ?>
 <link rel="stylesheet" href="public/assets/css/admin.css">
-
+<link rel="stylesheet" href="public/assets/css/base.css">
+<h1><?= isset($category) ? "Sửa" : "Thêm mới" ?> danh mục</h1>
 <div id="catFormBox"
     data-existing='<?= json_encode($existingNames ?? []) ?>'
     data-current='<?= $category['name'] ?? "" ?>'>
