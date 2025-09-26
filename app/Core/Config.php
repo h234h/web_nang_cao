@@ -6,7 +6,7 @@ class Config
     const DB_NAME = "nghe_lai";
     const DB_USER = "root";
     const DB_PASS = "";
-    const BASE_URL = "http://localhost/nghelai_cs/public/";
+    const BASE_URL = "http://localhost/web_nc/public/";
 
     public static function get($key)
     {
