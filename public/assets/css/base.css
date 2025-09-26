@@ -1,0 +1,84 @@
+.admin-header {
+  background-color: #1f2937; /* bg-gray-800 */
+  color: #fff;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Topbar */
+.topbar {
+  height: 64px;
+}
+.logo {
+  width: 36px;
+  height: 36px;
+  background: #6366f1;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.brand-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+.search-form {
+  max-width: 400px;
+}
+
+/* Avatar */
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.user-name {
+  font-weight: 500;
+}
+
+/* Bell */
+.icon-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: #ccc;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Menu */
+.topnav {
+  background: #111;
+  border-top: 1px solid #333;
+}
+.menu-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+.menu-btn:hover {
+  background: #222;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+.menu-btn.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}

@@ -1,0 +1,348 @@
+:root {
+  --bg: #f6f7fb;
+  --panel: #fff;
+  --text: #0f172a;
+  --muted: #6b7280;
+  --line: #e6e9ef;
+  --shadow: 0 8px 22px rgba(2, 6, 23, 0.06);
+  --accent: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* Header */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row {
+  height: 64px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  background: #f3f6fb;
+  color: #0b1220;
+}
+.brand-name {
+  font-weight: 800;
+  font-size: 18px;
+  white-space: nowrap;
+}
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #eef2f6;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+.user-name {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Search GIỮA – to hơn */
+.search {
+  display: flex;
+  justify-content: center;
+}
+.search input {
+  width: 100%;
+  max-width: 760px;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
+}
+
+/* MENU NGANG căn giữa */
+.topnav {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 10px 10px;
+  flex-wrap: wrap;
+}
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+}
+.nav-item:hover {
+  background: #f1f4f8;
+}
+.nav-item.active {
+  background: var(--accent);
+  color: #fff;
+}
+.nav-item span {
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .nav-item span {
+    display: none;
+  }
+} /* nhỏ: chỉ icon */
+
+/* Main */
+.content {
+  padding: 20px;
+}
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+}
+h1 {
+  margin: 6px 0 14px;
+  font-size: 28px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+.card-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.card-value {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 2px 0;
+}
+.card-value.green {
+  color: #16a34a;
+}
+.card-sub {
+  color: var(--muted);
+}
+.panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Notify panel */
+.notify {
+  position: fixed;
+  right: 12px;
+  top: 80px;
+  width: 320px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.notify-head {
+  font-weight: 800;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.notify-item {
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+.hidden {
+  display: none !important;
+}
+
+/* === Never wrap icons: keep one horizontal row, scroll when overflow === */
+.topnav {
+  display: flex;
+  flex-wrap: nowrap !important; /* không xuống dòng */
+  white-space: nowrap; /* ngăn text/icon xuống dòng */
+  overflow-x: auto; /* tràn sẽ cuộn ngang */
+  -webkit-overflow-scrolling: touch;
+}
+.topnav .nav-item {
+  flex: 0 0 auto; /* giữ kích thước tự nhiên, không co giãn */
+  white-space: nowrap; /* icon + text (nếu có) cùng một dòng */
+}
+
+/* Cố định các icon bên phải header cũng không wrap */
+.top-right {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.top-left {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+/* Tối ưu padding icon ở màn rất hẹp để tăng số lượng icon hiển thị trước khi phải cuộn */
+@media (max-width: 576px) {
+  .topnav .nav-item {
+    padding: 6px 6px;
+  }
+}
+@media (max-width: 360px) {
+  .topnav .nav-item {
+    padding: 5px 6px;
+  }
+}
+
+/* === Header follows the same 80% behavior as nav icons === */
+.topbar-inner {
+  width: 80vw !important;
+  max-width: 80vw !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Keep left, search, right in a single line and flexible */
+.topbar-row {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+.top-left,
+.search,
+.top-right {
+  min-width: 0;
+}
+.top-left,
+.top-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  gap: clamp(6px, 1vw, 10px);
+}
+
+/* Search input always ~70% of the middle column, every viewport */
+.search {
+  display: flex;
+  justify-content: center;
+}
+.search input {
+  width: 70% !important;
+  max-width: none !important;
+  height: clamp(34px, 4.5vh, 44px);
+  font-size: clamp(13px, 1.6vw, 16px);
+}
+
+/* Icons (bell, avatar) compact and never wrap */
+.icon-btn,
+.avatar,
+.logo {
+  width: clamp(22px, 3vw, 32px);
+  height: clamp(22px, 3vw, 32px);
+  display: grid;
+  place-items: center;
+}
+.top-right {
+  gap: clamp(4px, 0.8vw, 10px);
+}
+
+/* Ensure nav remains one row, scrolling when overflow (already set) */
+.topnav {
+  flex-wrap: nowrap !important;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.topnav .nav-item {
+  flex: 0 0 auto;
+}
+
+/* === Simple icon-only nav at all sizes === */
+.topnav {
+  height: 44px;
+  gap: 6px;
+}
+.topnav .nav-item {
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+.topnav .nav-item span {
+  display: none !important;
+} /* always hide labels, keep only icons */
+
+/* === Force logo to 40x40 across all viewports === */
+.logo {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+/* === Nav labels responsive behavior === */
+/* Desktop (>=1025px): show text labels next to icons */
+@media (min-width: 1025px) {
+  .topnav .nav-item span {
+    display: inline !important;
+  }
+}
+
+/* Tablet & Mobile (<=1024px): icon-only */
+@media (max-width: 1024px) {
+  .topnav .nav-item span {
+    display: none !important;
+  }
+}
