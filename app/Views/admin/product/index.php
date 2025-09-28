@@ -1,6 +1,6 @@
 <?php require_once __DIR__ . "/../layouts/header.php"; ?>
 <link rel="stylesheet" href="public/assets/css/admin.css" />
-
+<link rel="stylesheet" href="public/assets/css/admin/product.css" />
 <h1>Danh sách sản phẩm</h1>
 
 <a href="index.php?url=admin/Product/form">Thêm sản phẩm</a>

@@ -1,4 +1,5 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
+<link rel="stylesheet" href="public/assets/css/admin/product.css" />
 
 <h1><?= $product ? "Sửa sản phẩm" : "Thêm sản phẩm" ?></h1>
 
@@ -54,7 +55,7 @@
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Lưu</button>
-            <a class="btn btn-ghost" href="<?= Config::BASE_URL ?>index.php?url=admin/Product/index">Quay lại</a>
+            <a class="btn btn-ghost" href="index.php?url=admin/Product/index">Quay lại</a>
         </div>
     </form>
 </div>

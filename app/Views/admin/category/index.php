@@ -1,5 +1,5 @@
 <?php require_once __DIR__ . "/../layouts/header.php"; ?>
-<link rel="stylesheet" href="public/assets/css/admin.css">
+<link rel="stylesheet" href="public/assets/css/admin/category.css" />
 
 <h1>Danh mục sản phẩm</h1>
 <a href="<?= Config::BASE_URL ?>index.php?url=admin/Category/form">Thêm mới</a>
