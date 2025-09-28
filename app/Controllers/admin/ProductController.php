@@ -29,9 +29,12 @@ class ProductController extends BaseController
         }
 
         $categories = $this->category->getAll();
+        $allProducts = $this->product->getAll(); // thêm để đưa danh sách tên xuống form
+
         $this->view("admin/product/form", [
-            "product" => $product,
-            "categories" => $categories
+            "product"     => $product,
+            "categories"  => $categories,
+            "allProducts" => $allProducts
         ]);
     }
 
@@ -61,11 +64,13 @@ class ProductController extends BaseController
         $existing = $this->product->getByName($data['Name']);
         if ($existing && (!$id || $existing['id_sp'] != $id)) {
             $categories = $this->category->getAll();
+            $allProducts = $this->product->getAll();
             $this->view("admin/product/form", [
-                "product"    => $old,
-                "categories" => $categories,
-                "errors"     => ["Name" => "Tên sản phẩm đã tồn tại."],
-                "old"        => $_POST,
+                "product"     => $old,
+                "categories"  => $categories,
+                "allProducts" => $allProducts,
+                "errors"      => ["Name" => "Tên sản phẩm đã tồn tại."],
+                "old"         => $_POST,
             ]);
             return;
         }
@@ -82,11 +87,13 @@ class ProductController extends BaseController
         // Nếu có lỗi thì quay lại form
         if (!empty($errors)) {
             $categories = $this->category->getAll();
+            $allProducts = $this->product->getAll();
             $this->view("admin/product/form", [
-                "product"    => $old,
-                "categories" => $categories,
-                "errors"     => $errors,
-                "old"        => $_POST,
+                "product"     => $old,
+                "categories"  => $categories,
+                "allProducts" => $allProducts,
+                "errors"      => $errors,
+                "old"         => $_POST,
             ]);
             return;
         }
