@@ -1,9 +1,17 @@
 <?php require_once __DIR__ . "/../layouts/header.php"; ?>
 
+<link rel="stylesheet" href="public/assets/css/admin/employee.css" />
+
 <h1><?= $employee ? "Edit Employee" : "Add Employee" ?></h1>
 
-<form action="index.php?url=admin/Employee/save" method="post">
+<form action="index.php?url=admin/Employee/save" method="post" class="emp-form">
     <input type="hidden" name="id" value="<?= $employee["id_user"] ?? "" ?>">
+
+    <?php if (!empty($error)): ?>
+        <div class="alert-error">
+            <?= htmlspecialchars($error) ?>
+        </div>
+    <?php endif; ?>
 
     <label>Username</label>
     <input type="text" name="username" value="<?= htmlspecialchars($employee["username"] ?? "") ?>" required>
@@ -29,11 +37,8 @@
         <option value="0" <?= ($employee["status"] ?? 1) == 0 ? "selected" : "" ?>>Locked</option>
     </select>
 
-    <button type="submit">Save</button>
-    <a href="index.php?url=admin/Employee/index">Back</a>
-</form>
-<?php if (!empty($error)): ?>
-    <div style="color: red; font-weight: bold; margin-bottom: 10px;">
-        <?= htmlspecialchars($error) ?>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="index.php?url=admin/Employee/index" class="btn btn-ghost">Back</a>
     </div>
-<?php endif; ?>
+</form>

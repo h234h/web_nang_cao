@@ -460,3 +460,71 @@ h1 + a[href*="Product/form"] {
 .toast.hide {
   opacity: 0;
 }
+/* --- FIX: canh thẳng hàng nút Sửa / Xóa trong cột Thao tác --- */
+.product-table td.col-actions {
+  /* nếu bạn đã set class="col-actions" cho <td> */
+  display: flex;
+  justify-content: flex-end; /* đẩy về bên phải */
+  align-items: center; /* canh giữa theo chiều dọc */
+  gap: 8px; /* khoảng cách 8px giữa các nút */
+  text-align: initial; /* bỏ ảnh hưởng text-align:right của cột */
+  padding-right: 12px; /* giữ đệm phải như các ô khác */
+}
+
+/* Trường hợp chưa gắn class cho <td>, fallback theo vị trí cột 9 */
+.product-table tbody tr > td:nth-child(9) {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  text-align: initial;
+}
+
+/* Đồng bộ kích thước pill để không lệch baseline */
+.product-table .col-actions a,
+.product-table tbody tr > td:nth-child(9) a {
+  display: inline-flex;
+  align-items: center;
+  height: 32px; /* cố định chiều cao */
+  padding: 0 12px; /* đệm ngang, không lệch dọc */
+  border-radius: 999px;
+  line-height: 1; /* tránh đội baseline */
+}
+
+/* Giữ lại style màu cảnh báo cho nút Xóa */
+.product-table .col-actions a[href*="Product/delete/"],
+.product-table tbody tr > td:nth-child(9) a[href*="Product/delete/"] {
+  background: #2a1414;
+  border-color: #5c2b2b;
+  color: #ff8787 !important;
+}
+.product-table .col-actions a[href*="Product/delete/"]:hover,
+.product-table tbody tr > td:nth-child(9) a[href*="Product/delete/"]:hover {
+  background: #371a1a;
+  color: #ffa2a2 !important;
+}
+/* === Force primary button to stay green in all states === */
+.btn.btn-primary,
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active,
+.btn.btn-primary:focus-visible {
+  background: var(--primary, #1db954) !important;
+  border-color: var(--primary, #1db954) !important;
+  color: #121212 !important;
+  box-shadow: none !important; /* bỏ viền xanh của Bootstrap */
+  outline: none !important;
+}
+
+/* Ghost button giữ màu tối ở mọi state */
+.btn.btn-ghost,
+.btn.btn-ghost:hover,
+.btn.btn-ghost:focus,
+.btn.btn-ghost:active,
+.btn.btn-ghost:focus-visible {
+  background: #1b1b1b !important;
+  border-color: var(--line, #2b2b2b) !important;
+  color: var(--text, #fff) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}

@@ -63,4 +63,10 @@ class Product extends BaseModel
         $sql = "DELETE FROM sanpham WHERE id_sp = :id";
         return $this->execute($sql, [':id' => $id]);
     }
+    //USER
+    public function getAllActive()
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE status = 1 ORDER BY id_sp DESC";
+        return $this->fetchAll($sql);
+    }
 }
