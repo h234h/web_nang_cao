@@ -16,7 +16,7 @@ class ProductController extends BaseController
     // Danh sách sản phẩm
     public function index()
     {
-        $products = $this->product->getAll();
+        $products = $this->product->getAll(); // trả về cột của bảng product
         $this->view("admin/product/index", ["products" => $products]);
     }
 
@@ -25,11 +25,11 @@ class ProductController extends BaseController
     {
         $product = null;
         if ($id) {
-            $product = $this->product->getById($id);
+            $product = $this->product->getById($id); // dùng product_id, image_url, ...
         }
 
-        $categories = $this->category->getAll();
-        $allProducts = $this->product->getAll(); // thêm để đưa danh sách tên xuống form
+        $categories  = $this->category->getAll();
+        $allProducts = $this->product->getAll();
 
         $this->view("admin/product/form", [
             "product"     => $product,
@@ -50,20 +50,21 @@ class ProductController extends BaseController
             'Mount'      => (int)($_POST['Mount'] ?? 0),
             'Sale'       => (int)($_POST['Sale'] ?? 0),
             'id_danhmuc' => (int)($_POST['id_danhmuc'] ?? 0),
+            // DB product không có cột status -> giữ lại trong $data nhưng Model đã bỏ qua
             'status'     => isset($_POST['status']) ? 1 : 0,
             'image'      => ''
         ];
 
-        // Giữ ảnh cũ nếu có
+        // Giữ ảnh cũ nếu có (đổi image -> image_url)
         $old = $id ? $this->product->getById($id) : null;
-        if ($old && !empty($old['image'])) {
-            $data['image'] = $old['image'];
+        if ($old && !empty($old['image_url'])) {
+            $data['image'] = $old['image_url'];
         }
 
-        // Kiểm tra trùng tên
+        // Kiểm tra trùng tên (đổi id_sp -> product_id)
         $existing = $this->product->getByName($data['Name']);
-        if ($existing && (!$id || $existing['id_sp'] != $id)) {
-            $categories = $this->category->getAll();
+        if ($existing && (!$id || (int)$existing['product_id'] !== (int)$id)) {
+            $categories  = $this->category->getAll();
             $allProducts = $this->product->getAll();
             $this->view("admin/product/form", [
                 "product"     => $old,
@@ -77,7 +78,7 @@ class ProductController extends BaseController
 
         // Validate cơ bản
         $errors = [];
-        if (!$data['Name']) $errors['Name'] = "Tên sản phẩm bắt buộc.";
+        if (!$data['Name']) $errors['Name']   = "Tên sản phẩm bắt buộc.";
         if ($data['Price'] <= 0) $errors['Price'] = "Giá phải lớn hơn 0.";
         if ($data['Mount'] <= 0) $errors['Mount'] = "Hàng tồn phải > 0.";
         if (!$id && empty($_FILES['image']['tmp_name']) && empty($data['image'])) {
@@ -86,7 +87,7 @@ class ProductController extends BaseController
 
         // Nếu có lỗi thì quay lại form
         if (!empty($errors)) {
-            $categories = $this->category->getAll();
+            $categories  = $this->category->getAll();
             $allProducts = $this->product->getAll();
             $this->view("admin/product/form", [
                 "product"     => $old,
@@ -112,15 +113,15 @@ class ProductController extends BaseController
             }
 
             if (move_uploaded_file($_FILES['image']['tmp_name'], $targetDir . $filename)) {
-                // Nếu update có ảnh cũ -> xóa
-                if ($old && !empty($old['image']) && file_exists($targetDir . $old['image'])) {
-                    unlink($targetDir . $old['image']);
+                // Nếu update có ảnh cũ -> xóa (đổi image -> image_url)
+                if ($old && !empty($old['image_url']) && file_exists($targetDir . $old['image_url'])) {
+                    unlink($targetDir . $old['image_url']);
                 }
-                $data['image'] = $filename;
+                $data['image'] = $filename; // Model sẽ map sang image_url
             }
         }
 
-        // Lưu vào DB
+        // Lưu vào DB (Model Product đã map các key này sang cột mới)
         if ($id) {
             $this->product->updateProduct($id, $data);
         } else {
@@ -136,8 +137,8 @@ class ProductController extends BaseController
         $product = $this->product->getById($id);
 
         if ($product) {
-            $imagePath = __DIR__ . "/../../../public/uploads/products/" . $product['image'];
-            if (!empty($product['image']) && file_exists($imagePath)) {
+            $imagePath = __DIR__ . "/../../../public/uploads/products/" . ($product['image_url'] ?? '');
+            if (!empty($product['image_url']) && file_exists($imagePath)) {
                 unlink($imagePath);
             }
             $this->product->deleteProduct($id);

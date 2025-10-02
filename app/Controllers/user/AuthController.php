@@ -1,125 +1,109 @@
 <?php
 // app/Controllers/user/AuthController.php
-require_once __DIR__ . '/../../Core/BaseController.php';
-require_once __DIR__ . '/../../Models/User.php';
+require_once __DIR__ . "/../../Models/User.php";
 
 class AuthController extends BaseController
 {
-    private function redirectByRole($role)
+    protected $user;
+
+    public function __construct()
     {
-        // Router của bạn dùng tham số "url", nên truyền path, KHÔNG dùng ?r=
-        if ((int)$role === 0) {
-            $this->redirect('admin/Dashboard/index'); // admin → dashboard
-        } else {
-            $this->redirect('user/Home/index');       // user → home
-        }
+        $this->user = new User();
     }
 
+    // Form đăng nhập
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = trim($_POST['username'] ?? '');
-            $password = (string)($_POST['password'] ?? '');
+            $identifier = trim($_POST['username'] ?? '');
+            $password = trim($_POST['password'] ?? '');
 
-            $userModel = new User();
-            $user = $userModel->verifyLogin($username, $password);
-
-            if ($user) {
-                if (session_status() === PHP_SESSION_NONE) session_start();
-                $_SESSION['auth'] = [
-                    'id_user'  => $user['id_user'],
-                    'username' => $user['username'],
-                    'role'     => (int)$user['role'],
-                    'fullname' => $user['fullname'] ?? '',
-                    'email'    => $user['email'] ?? '',
-                ];
-                $this->redirectByRole((int)$user['role']);
-                return;
+            if (empty($identifier) || empty($password)) {
+                $error = "Vui lòng nhập đầy đủ tài khoản/mật khẩu";
+                return $this->view("user/auth/login", ["error" => $error]);
             }
 
-            $data = ['error' => 'Sai tên đăng nhập hoặc mật khẩu.'];
-            return $this->view('user/auth/login', $data);   // dùng view()
-        }
+            $user = $this->user->findByUsernameOrEmail($identifier);
 
-        // GET
-        return $this->view('user/auth/login');
+            if (!$user) {
+                $error = "Sai tên đăng nhập hoặc email";
+                return $this->view("user/auth/login", ["error" => $error]);
+            }
+
+            if ($user['password'] !== md5($password)) {
+                $error = "Sai mật khẩu";
+                return $this->view("user/auth/login", ["error" => $error]);
+            }
+
+            if ($user['account_status'] != 1) {
+                $error = "Tài khoản đã bị khóa!";
+                return $this->view("user/auth/login", ["error" => $error]);
+            }
+
+            // Lưu session
+            $_SESSION['user'] = [
+                "id" => $user['user_id'],
+                "username" => $user['username'],
+                "role" => $user['role']
+            ];
+
+            // Điều hướng
+            if ($user['role'] == 0) { // Admin
+                $this->redirect("admin/Dashboard/index");
+            } else {
+                $this->redirect("user/Home/index");
+            }
+        } else {
+            $this->view("user/auth/login");
+        }
     }
 
+    // Form đăng ký
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = trim($_POST['username'] ?? '');
-            $password = (string)($_POST['password'] ?? '');
-            $repass   = (string)($_POST['repass'] ?? '');
-            $fullname = trim($_POST['fullname'] ?? '');
-            $email    = trim($_POST['email'] ?? '');
-            $phone    = trim($_POST['phone'] ?? '');
-            $address  = trim($_POST['address'] ?? '');
+            $full_name = trim($_POST['full_name'] ?? '');
+            $password = trim($_POST['password'] ?? '');
+            $confirm = trim($_POST['confirm'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $phone = trim($_POST['phone'] ?? '');
+            $address = trim($_POST['address'] ?? '');
 
-            $errors = [];
-            if ($username === '' || $password === '' || $fullname === '' || $email === '') {
-                $errors[] = 'Vui lòng điền đủ các trường bắt buộc.';
-            }
-            if ($password !== $repass) {
-                $errors[] = 'Mật khẩu nhập lại không khớp.';
+            if (empty($username) || empty($password) || empty($email)) {
+                $error = "Vui lòng nhập đầy đủ thông tin bắt buộc";
+                return $this->view("user/auth/register", ["error" => $error]);
             }
 
-            $userModel = new User();
-            if ($userModel->findByUsername($username)) {
-                $errors[] = 'Tên đăng nhập đã tồn tại.';
-            }
-            if ($userModel->findByEmail($email)) {
-                $errors[] = 'Email đã tồn tại.';
+            if ($password !== $confirm) {
+                $error = "Mật khẩu xác nhận không khớp";
+                return $this->view("user/auth/register", ["error" => $error]);
             }
 
-            if (!empty($errors)) {
-                return $this->view('user/auth/register', ['errors' => $errors, 'old' => $_POST]);
+            if ($this->user->existsByUsername($username)) {
+                $error = "Tên đăng nhập đã tồn tại";
+                return $this->view("user/auth/register", ["error" => $error]);
             }
 
-            $ok = $userModel->create([
-                'username' => $username,
-                'password' => $password,
-                'fullname' => $fullname,
-                'email'    => $email,
-                'phone'    => $phone,
-                'address'  => $address,
-            ]);
-
-            if ($ok) {
-                // auto login sau đăng ký
-                $user = $userModel->verifyLogin($username, $password);
-                if ($user) {
-                    if (session_status() === PHP_SESSION_NONE) session_start();
-                    $_SESSION['auth'] = [
-                        'id_user'  => $user['id_user'],
-                        'username' => $user['username'],
-                        'role'     => (int)$user['role'],
-                        'fullname' => $user['fullname'] ?? '',
-                        'email'    => $user['email'] ?? '',
-                    ];
-                    $this->redirectByRole((int)$user['role']);
-                    return;
-                }
-                // fallback
-                $this->redirect('user/Auth/login');
-                return;
+            if ($this->user->existsByEmail($email)) {
+                $error = "Email đã tồn tại";
+                return $this->view("user/auth/register", ["error" => $error]);
             }
 
-            return $this->view('user/auth/register', [
-                'errors' => ['Không thể tạo tài khoản. Vui lòng thử lại.'],
-                'old'    => $_POST
-            ]);
+            $this->user->create($username, $full_name, $password, $email, $phone, $address);
+
+            $success = "Đăng ký thành công! Vui lòng đăng nhập.";
+            return $this->view("user/auth/register", ["success" => $success]);
+        } else {
+            $this->view("user/auth/register");
         }
-
-        // GET
-        return $this->view('user/auth/register');
     }
 
+    // Đăng xuất
     public function logout()
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
-        unset($_SESSION['auth']);
+        unset($_SESSION['user']);
         session_destroy();
-        $this->redirect('user/Auth/login');
+        $this->redirect("user/Auth/login");
     }
 }

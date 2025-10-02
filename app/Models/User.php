@@ -1,54 +1,54 @@
 <?php
 // app/Models/User.php
-require_once __DIR__ . '/../Core/BaseModel.php';
+require_once __DIR__ . "/../Core/BaseModel.php";
 
 class User extends BaseModel
 {
-    protected $table = 'taikhoan';
+    protected $table = "user";
 
-    public function findByUsername(string $username)
+    // Tìm user theo username hoặc email
+    public function findByUsernameOrEmail($identifier)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE username = :u LIMIT 1";
-        return $this->fetch($sql, [':u' => $username]); // dùng fetch() của BaseModel
+        $sql = "SELECT * FROM {$this->table} WHERE username = :identifier OR email = :identifier LIMIT 1";
+        return $this->fetch($sql, [':identifier' => $identifier]);
     }
 
-    public function findByEmail(string $email)
+    // Tìm user theo email
+    public function findByEmail($email)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE email = :e LIMIT 1";
-        return $this->fetch($sql, [':e' => $email]);
+        $sql = "SELECT * FROM {$this->table} WHERE email = :email LIMIT 1";
+        return $this->fetch($sql, [':email' => $email]);
     }
 
-    public function create(array $data)
+    // Kiểm tra username đã tồn tại chưa
+    public function existsByUsername($username)
     {
-        // DB hiện đang lưu MD5 → để khớp dữ liệu có sẵn.
-        $sql = "INSERT INTO {$this->table}
-                (username, password, fullname, email, phone, address, role, status, created_at)
-                VALUES (:username, :password, :fullname, :email, :phone, :address, :role, :status, NOW())";
-        $params = [
-            ':username' => $data['username'],
-            ':password' => md5($data['password']),   // nếu chuyển bcrypt, đổi chỗ này + verifyLogin()
-            ':fullname' => $data['fullname'],
-            ':email'    => $data['email'],
-            ':phone'    => $data['phone'] ?? '',
-            ':address'  => $data['address'] ?? '',
-            ':role'     => 1,   // user
-            ':status'   => 1,
-        ];
-        return $this->execute($sql, $params);        // dùng execute() của BaseModel
+        $sql = "SELECT user_id FROM {$this->table} WHERE username = :username LIMIT 1";
+        $result = $this->fetch($sql, [':username' => $username]);
+        return $result ? true : false;
     }
 
-    public function verifyLogin(string $username, string $password)
+    // Kiểm tra email đã tồn tại chưa
+    public function existsByEmail($email)
     {
-        $user = $this->findByUsername($username);
-        if (!$user) return false;
+        $sql = "SELECT user_id FROM {$this->table} WHERE email = :email LIMIT 1";
+        $result = $this->fetch($sql, [':email' => $email]);
+        return $result ? true : false;
+    }
 
-        // Khớp với MD5 trong DB hiện tại:
-        $ok = (md5($password) === $user['password']);
-        // Nếu dùng bcrypt sau này: $ok = password_verify($password, $user['password']);
-
-        if (!$ok) return false;
-        if ((int)$user['status'] !== 1) return false;
-
-        return $user;
+    // Đăng ký user mới
+    public function create($username, $full_name, $password, $email, $phone = null, $address = null, $role = 1)
+    {
+        $sql = "INSERT INTO {$this->table} (username, full_name, password, email, phone, address, role, account_status) 
+                VALUES (:username, :full_name, :password, :email, :phone, :address, :role, 1)";
+        return $this->execute($sql, [
+            ':username' => $username,
+            ':full_name' => $full_name,
+            ':password' => md5($password), // ⚠ dùng md5 đúng chuẩn db
+            ':email' => $email,
+            ':phone' => $phone,
+            ':address' => $address,
+            ':role' => $role
+        ]);
     }
 }
