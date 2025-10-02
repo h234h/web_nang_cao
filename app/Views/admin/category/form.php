@@ -1,23 +1,26 @@
 <?php require_once __DIR__ . "/../layouts/header.php"; ?>
-<link rel="stylesheet" href="public/assets/css/admin.css">
-<link rel="stylesheet" href="public/assets/css/admin/category.css" />
-<h1><?= isset($category) ? "Sửa" : "Thêm mới" ?> danh mục</h1>
-<div id="catFormBox"
-    data-existing='<?= json_encode($existingNames ?? []) ?>'
-    data-current='<?= $category['name'] ?? "" ?>'>
-    <div class="cat-form-card">
-        <form action="<?= Config::BASE_URL ?>index.php?url=admin/Category/save" method="post">
-            <input type="hidden" name="id" value="<?= $category['id'] ?? "" ?>">
-            <label for="cat-name">Tên danh mục</label>
-            <input type="text" id="cat-name" name="name" value="<?= htmlspecialchars($category['name'] ?? '') ?>" required>
-            <div id="nameErr" class="hidden" style="color:red;margin-top:4px;font-weight:600;"></div>
+<link rel="stylesheet" href="/web_nc/public/assets/css/admin/category.css">
 
-            <div class="cat-form-actions">
-                <button type="submit" class="btn-chip btn-primary">Lưu</button>
-                <a href="<?= Config::BASE_URL ?>index.php?url=admin/Category/index" class="btn-chip btn-ghost">Hủy</a>
-            </div>
-        </form>
+<?php
+$catId   = $old['id']                ?? ($category['category_id']   ?? '');
+$catName = $old['name']              ?? ($category['category_name'] ?? '');
+$title   = $catId ? "Sửa danh mục" : "Thêm danh mục";
+?>
+
+<h1><?= htmlspecialchars($title) ?></h1>
+
+<?php if (!empty($error)): ?>
+    <div><?= htmlspecialchars($error) ?></div>
+<?php endif; ?>
+
+<form method="post" action="index.php?url=admin/Category/save" class="cat-form-card">
+    <input type="hidden" name="id" value="<?= htmlspecialchars($catId) ?>">
+
+    <label for="name">Tên danh mục</label>
+    <input id="name" name="name" type="text" required value="<?= htmlspecialchars($catName) ?>">
+
+    <div class="cat-form-actions">
+        <button type="submit" class="btn-chip btn-primary">Lưu</button>
+        <a href="index.php?url=admin/Category/index" class="btn-chip btn-ghost">Hủy</a>
     </div>
-</div>
-
-<script src="public/assets/js/admin.js"></script>
+</form>

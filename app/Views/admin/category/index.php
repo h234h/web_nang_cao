@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="public/assets/css/admin/category.css" />
 
 <h1>Danh mục sản phẩm</h1>
-<a href="<?= Config::BASE_URL ?>index.php?url=admin/Category/form">Thêm mới</a>
+<a href="index.php?url=admin/Category/form">Thêm mới</a>
 
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
@@ -19,11 +19,11 @@
             </tr>
             <?php else: foreach ($categories as $cat): ?>
                 <tr>
-                    <td style="text-align:center"><?= $cat['id'] ?></td>
-                    <td><?= htmlspecialchars($cat['name']) ?></td>
+                    <td style="text-align:center"><?= htmlspecialchars($cat['category_id']) ?></td>
+                    <td><?= htmlspecialchars($cat['category_name']) ?></td>
                     <td>
-                        <a href="<?= Config::BASE_URL ?>index.php?url=admin/Category/form/<?= $cat['id'] ?>">Sửa</a> |
-                        <a href="<?= Config::BASE_URL ?>index.php?url=admin/Category/delete/<?= $cat['id'] ?>"
+                        <a href="index.php?url=admin/Category/form/<?= urlencode($cat['category_id']) ?>">Sửa</a> |
+                        <a href="index.php?url=admin/Category/delete/<?= urlencode($cat['category_id']) ?>"
                             onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
                     </td>
                 </tr>
