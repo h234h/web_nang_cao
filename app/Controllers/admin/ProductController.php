@@ -13,14 +13,12 @@ class ProductController extends BaseController
         $this->category = new Category();
     }
 
-    // Danh sách sản phẩm
     public function index()
     {
         $products = $this->product->getAll();
         $this->view("admin/product/index", ["products" => $products]);
     }
 
-    // Form thêm/sửa
     public function form($id = null)
     {
         $product = null;
@@ -28,8 +26,8 @@ class ProductController extends BaseController
             $product = $this->product->getById($id);
         }
 
-        $categories = $this->category->getAll();
-        $allProducts = $this->product->getAll(); // thêm để đưa danh sách tên xuống form
+        $categories  = $this->category->getAll();
+        $allProducts = $this->product->getAll();
 
         $this->view("admin/product/form", [
             "product"     => $product,
@@ -38,13 +36,13 @@ class ProductController extends BaseController
         ]);
     }
 
-    // Lưu sản phẩm (thêm/sửa)
     public function save()
     {
         $id = $_POST['id'] ?? null;
 
         $data = [
             'Name'       => trim($_POST['Name'] ?? ''),
+            'maker'      => trim($_POST['maker'] ?? ''), // <-- thêm maker
             'Price'      => (float)($_POST['Price'] ?? 0),
             'Decribe'    => trim($_POST['Decribe'] ?? ''),
             'Mount'      => (int)($_POST['Mount'] ?? 0),
@@ -54,16 +52,14 @@ class ProductController extends BaseController
             'image'      => ''
         ];
 
-        // Giữ ảnh cũ nếu có
         $old = $id ? $this->product->getById($id) : null;
-        if ($old && !empty($old['image'])) {
-            $data['image'] = $old['image'];
+        if ($old && !empty($old['image_url'])) {
+            $data['image'] = $old['image_url'];
         }
 
-        // Kiểm tra trùng tên
         $existing = $this->product->getByName($data['Name']);
-        if ($existing && (!$id || $existing['id_sp'] != $id)) {
-            $categories = $this->category->getAll();
+        if ($existing && (!$id || (int)$existing['product_id'] !== (int)$id)) {
+            $categories  = $this->category->getAll();
             $allProducts = $this->product->getAll();
             $this->view("admin/product/form", [
                 "product"     => $old,
@@ -75,18 +71,19 @@ class ProductController extends BaseController
             return;
         }
 
-        // Validate cơ bản
         $errors = [];
-        if (!$data['Name']) $errors['Name'] = "Tên sản phẩm bắt buộc.";
+        if (!$data['Name']) $errors['Name']   = "Tên sản phẩm bắt buộc.";
         if ($data['Price'] <= 0) $errors['Price'] = "Giá phải lớn hơn 0.";
         if ($data['Mount'] <= 0) $errors['Mount'] = "Hàng tồn phải > 0.";
+        // maker là optional theo DB, nếu bạn muốn bắt buộc thì mở dòng dưới
+        // if ($data['maker'] === '') $errors['maker'] = "Vui lòng nhập Nghệ sĩ/Hãng.";
+
         if (!$id && empty($_FILES['image']['tmp_name']) && empty($data['image'])) {
             $errors['image'] = "Vui lòng chọn ảnh sản phẩm.";
         }
 
-        // Nếu có lỗi thì quay lại form
         if (!empty($errors)) {
-            $categories = $this->category->getAll();
+            $categories  = $this->category->getAll();
             $allProducts = $this->product->getAll();
             $this->view("admin/product/form", [
                 "product"     => $old,
@@ -98,12 +95,10 @@ class ProductController extends BaseController
             return;
         }
 
-        // Upload ảnh (sau khi validate xong)
         if (!empty($_FILES['image']['tmp_name'])) {
             $originalName = pathinfo($_FILES['image']['name'], PATHINFO_FILENAME);
             $originalName = preg_replace('/\s+/', '_', $originalName);
             $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-
             $filename = $originalName . "_" . time() . "." . $extension;
 
             $targetDir = __DIR__ . "/../../../public/uploads/products/";
@@ -112,15 +107,13 @@ class ProductController extends BaseController
             }
 
             if (move_uploaded_file($_FILES['image']['tmp_name'], $targetDir . $filename)) {
-                // Nếu update có ảnh cũ -> xóa
-                if ($old && !empty($old['image']) && file_exists($targetDir . $old['image'])) {
-                    unlink($targetDir . $old['image']);
+                if ($old && !empty($old['image_url']) && file_exists($targetDir . $old['image_url'])) {
+                    unlink($targetDir . $old['image_url']);
                 }
                 $data['image'] = $filename;
             }
         }
 
-        // Lưu vào DB
         if ($id) {
             $this->product->updateProduct($id, $data);
         } else {
@@ -130,14 +123,13 @@ class ProductController extends BaseController
         $this->redirect("admin/Product/index");
     }
 
-    // Xóa sản phẩm
     public function delete($id)
     {
         $product = $this->product->getById($id);
 
         if ($product) {
-            $imagePath = __DIR__ . "/../../../public/uploads/products/" . $product['image'];
-            if (!empty($product['image']) && file_exists($imagePath)) {
+            $imagePath = __DIR__ . "/../../../public/uploads/products/" . ($product['image_url'] ?? '');
+            if (!empty($product['image_url']) && file_exists($imagePath)) {
                 unlink($imagePath);
             }
             $this->product->deleteProduct($id);

@@ -26,9 +26,9 @@ class CategoryController extends BaseController
             $category = $this->category->getById($id);
         }
 
-        // Lấy danh sách tên hiện có để kiểm tra trùng
+        // Lấy danh sách tên hiện có để kiểm tra trùng (đổi sang category_name)
         $categories = $this->category->getAll();
-        $names = array_column($categories, 'name');
+        $names = array_column($categories, 'category_name');
 
         $this->view("admin/category/form", [
             "category" => $category,
@@ -46,13 +46,17 @@ class CategoryController extends BaseController
             die("Tên danh mục không được để trống");
         }
 
-        // Lấy tất cả danh mục để check trùng
+        // Lấy tất cả danh mục để check trùng (đổi sang category_name)
         $categories = $this->category->getAll();
-        $names = array_map('mb_strtolower', array_column($categories, 'name'));
+        $names = array_map('mb_strtolower', array_column($categories, 'category_name'));
+
         if ($id) {
-            $current = $this->category->getById($id)['name'];
+            // đọc tên hiện tại theo key mới: category_name
+            $currentRow = $this->category->getById($id);
+            $current = $currentRow['category_name'] ?? '';
             $names = array_filter($names, fn($n) => mb_strtolower($n) !== mb_strtolower($current));
         }
+
         if (in_array(mb_strtolower($name), $names)) {
             die("Tên danh mục đã tồn tại");
         }

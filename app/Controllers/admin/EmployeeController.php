@@ -47,9 +47,9 @@ class EmployeeController extends BaseController
             ":status"   => $_POST["status"] ?? 1, // mặc định hoạt động
         ];
 
-        // Nếu có nhập mật khẩu thì hash
+        // Nếu có nhập mật khẩu thì mã hóa bằng MD5
         if (!empty($_POST["password"])) {
-            $data[":password"] = password_hash($_POST["password"], PASSWORD_BCRYPT);
+            $data[":password"] = md5($_POST["password"]);
         }
 
         // 📌 Kiểm tra trùng username
@@ -86,7 +86,8 @@ class EmployeeController extends BaseController
                 ]);
                 return;
             }
-            $data[":password"] = password_hash($_POST["password"], PASSWORD_BCRYPT);
+            // ⚠️ Hash bằng md5 khi thêm mới
+            $data[":password"] = md5($_POST["password"]);
             $this->employeeModel->insert($data);
         }
 
