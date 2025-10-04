@@ -1,0 +1,27 @@
+* [33m4b80c2d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mhuynh[m[33m)[m da them detail sp, chua lam het phan home
+* [33m5bd7ccf[m[33m ([m[1;31morigin/huynh[m[33m)[m đang hoàn thiện layout để có thể bấm vào tất cả nút ở home
+* [33m365a822[m da lam xong dang ky, dang nhap, thieu quen mat khau
+* [33m3ddd189[m da xong dang nhap dang ky, chua co quen mk
+[31m|[m *   [33md04c82e[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #1 from h234h/huynh
+[31m|[m [32m|[m[31m\[m  
+[31m|[m [32m|[m[31m/[m  
+[31m|[m[31m/[m[32m|[m   
+* [32m|[m [33mf6a05ce[m da fix loi sau khi doi db cua danh muc v san pham phan admin
+* [32m|[m [33m4a69630[m dang lam dang nhap, da doi database
+* [32m|[m [33m1bd3253[m da them login, register
+* [32m|[m [33m92b4f6b[m add len
+[32m|[m[32m/[m  
+[32m|[m * [33m234e57d[m[33m ([m[1;31morigin/khang[m[33m)[m update
+[32m|[m[32m/[m  
+* [33m0fbb6ff[m Đã có thêm sửa khóa nhân viên, có kiểm tra trùng tên và trùng email báo lỗi, chưa có css, danh mục chưa sửa phần kiểm tra trùng tên danh mục cho giống với sản phẩm
+* [33mfe92a88[m da sua lai cac file
+* [33m540b666[m đã thêm css cho sản phẩm
+* [33m2e55653[m da xong phan san pham cua admin, chua co css, js
+* [33m76bee1c[m da lam san pham cua admin chua them css
+* [33m6559bed[m da fix xong loi cua danh muc
+* [33mbeeac98[m da lam xong danh muc
+* [33m34871b4[m da lam xong danh muc
+* [33m0f120c9[m danh muc san pham con thieu giao dien dep hon
+* [33md96d68e[m moi fix xong layout danh muc cua admin
+* [33mcaba200[m xoa may file du thua
+* [33m3d89436[m add code
