@@ -1,0 +1,246 @@
+/* =========================
+   Product list & form (ADMIN)
+   ĐÃ CẬP NHẬT: thêm cột "Nghệ sĩ / Hãng" và bỏ "Trạng thái"
+   ========================= */
+
+/* ---- Bảng danh sách ---- */
+.product-table {
+  width: min(98%, 1200px) !important; /* mở rộng bảng để không ép chữ */
+  margin: 0 auto;
+  border-collapse: collapse;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  table-layout: fixed; /* để set width theo cột ổn định */
+}
+
+.product-table thead th {
+  background: #111;
+  font-weight: 900;
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.product-table tbody td {
+  padding: 14px 18px;
+  vertical-align: middle;
+  border-top: 1px solid #202020;
+}
+
+.col-center {
+  text-align: center;
+}
+
+/* Ảnh nhỏ trong bảng */
+.col-img img.prod-thumb {
+  display: inline-block;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.col-img .no-img {
+  opacity: 0.6;
+}
+
+/* Cột mô tả: cho phép xuống dòng, cắt bớt nếu quá dài tuỳ ý */
+.col-desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Nút thao tác */
+.col-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  margin: 0 6px;
+  border-radius: 999px;
+  font-weight: 800;
+  line-height: 1;
+  background: var(--chip-bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  text-decoration: none;
+}
+.col-actions a:hover {
+  background: var(--chip-bg-hover);
+  color: var(--text);
+}
+
+/* ------------ QUAN TRỌNG: map lại độ rộng 9 cột hiện tại ------------
+   1: ID · 2: Tên · 3: Nghệ sĩ/Hãng · 4: Giá · 5: Tồn
+   6: Ảnh · 7: Mô tả · 8: Danh mục · 9: Thao tác
+--------------------------------------------------------------------- */
+.product-table th:nth-child(1),
+.product-table td:nth-child(1) {
+  /* ID */
+  width: 72px;
+  text-align: center;
+}
+.product-table th:nth-child(2),
+.product-table td:nth-child(2) {
+  /* Tên */
+  width: 28%;
+}
+.product-table th:nth-child(3),
+.product-table td:nth-child(3) {
+  /* Nghệ sĩ / Hãng */
+  width: 18%;
+}
+.product-table th:nth-child(4),
+.product-table td:nth-child(4) {
+  /* Giá */
+  width: 110px;
+  text-align: center;
+}
+.product-table th:nth-child(5),
+.product-table td:nth-child(5) {
+  /* Tồn */
+  width: 90px;
+  text-align: center;
+}
+.product-table th:nth-child(6),
+.product-table td:nth-child(6) {
+  /* Ảnh */
+  width: 84px;
+  text-align: center;
+}
+.product-table th:nth-child(7),
+.product-table td:nth-child(7) {
+  /* Mô tả */
+  width: 26%;
+}
+.product-table th:nth-child(8),
+.product-table td:nth-child(8) {
+  /* Danh mục */
+  width: 100px;
+  text-align: center;
+}
+.product-table th:nth-child(9),
+.product-table td:nth-child(9) {
+  /* Thao tác */
+  width: 140px;
+  text-align: right;
+}
+
+/* ---- Form sản phẩm ---- */
+.prod-form-wrap {
+  width: min(98%, 880px);
+  margin: 16px auto 28px;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 20px;
+}
+
+.prod-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+.prod-form label {
+  font-weight: 800;
+}
+.prod-form input[type="text"],
+.prod-form input[type="number"],
+.prod-form select,
+.prod-form textarea {
+  width: 100%;
+  background: #0f0f0f;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.prod-form textarea {
+  grid-column: 1 / -1;
+  min-height: 110px;
+}
+.prod-form .form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Buttons (khớp style chung) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: var(--chip-bg);
+  color: var(--text);
+}
+.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #121212;
+}
+.btn-ghost {
+  background: #1b1b1b;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 767.98px) {
+  .product-table {
+    width: 100% !important;
+    display: block;
+    overflow-x: auto;
+  }
+  .prod-form {
+    grid-template-columns: 1fr;
+  }
+}
+/* Nút "Thêm sản phẩm" giống trang Danh mục */
+h1 + a[href*="Product/form"] {
+  float: none !important;
+  display: block;
+  width: max-content;
+  margin: 8px 0 12px auto;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  color: #121212 !important;
+  text-decoration: none;
+  font-weight: 800;
+  line-height: 1;
+}
+h1 + a[href*="Product/form"]:hover {
+  filter: brightness(1.05);
+}
+
+/* (giữ mapping cột như đã khai báo ở file này) */
+/* Ảnh xem trước trong form: nhỏ gọn & căn giữa */
+.prod-form .prod-thumb-inline {
+  width: 180px; /* đổi kích thước tại đây nếu muốn */
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  display: block;
+  margin: 8px auto 0; /* căn giữa */
+}
+
+/* Căn giữa nhóm nút Lưu/Hủy */
+.prod-form .form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center; /* trước đây là flex-end */
+  gap: 10px;
+}

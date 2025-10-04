@@ -1,0 +1,400 @@
+/* ================== Tokens (brand) ================== */
+:root {
+  /* Colors */
+  --bg: #121212; /* nền chính */
+  --panel: #1a1a1a; /* panel/card */
+  --line: #2a2a2a; /* viền */
+  --text: #ffffff; /* chữ chính */
+  --muted: #aaaaaa; /* chữ phụ */
+  --primary: #41f600; /* accent */
+  --ink: #121212; /* chữ trên nền primary */
+  --danger: #ff4d4d;
+  --warn: #ffd36b;
+  --success: #41f600;
+
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+
+  /* Fonts */
+  --heading-font: Segoe UI, -apple-system, system-ui, "Helvetica Neue", Arial,
+    sans-serif;
+  --body-font: -apple-system, system-ui, Segoe UI, "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+/* ================== Base ================== */
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body-font);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+.btn-ghost,
+.btn-add,
+.qty-minus,
+.qty-plus,
+.nav,
+.tab {
+  font-family: var(--heading-font);
+}
+
+/* ================== Wrap ================== */
+.pd-wrap {
+  max-width: 1100px;
+  margin: 26px auto 70px;
+  padding: 0 16px 16px;
+}
+
+/* Back button */
+.pd-back {
+  margin-bottom: 16px;
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #101010;
+  color: #eaeaea;
+  text-decoration: none;
+  font-weight: 800;
+  box-shadow: var(--shadow);
+}
+.btn-ghost:hover {
+  background: #161616;
+  border-color: #303030;
+}
+
+/* ================== Main grid ================== */
+.pd-main {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 0.9fr; /* cân đối, ảnh rộng hơn 1 chút */
+}
+@media (max-width: 980px) {
+  .pd-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================== Media (ảnh hiển thị FULL trong khung) ================== */
+.media-frame {
+  background: #0d0d0d;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0;
+  position: relative;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.35);
+
+  /* Khung cố định cao – ảnh luôn vừa khung, KHÔNG cắt */
+  height: 560px; /* bạn có thể chỉnh 480/520/600 tuỳ ý */
+  display: grid;
+  place-items: center; /* căn giữa cả 2 chiều */
+}
+
+/* Ảnh luôn hiển thị TRỌN VẸN bên trong khung (no crop) */
+.media-frame img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* quan trọng: không cắt ảnh */
+  object-position: center;
+  display: block;
+}
+
+/* Fallback khi chưa có ảnh */
+.media-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 64px;
+  color: #222;
+  background: #0f0f0f;
+}
+
+/* Nút phóng to vẫn như cũ */
+.zoom-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #111;
+  color: #eaeaea;
+  border: 1px solid #2f2f2f;
+  padding: 7px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.zoom-btn:hover {
+  background: #161616;
+}
+
+/* ================== Info panel ================== */
+.pd-info {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 18px;
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.pd-meta {
+  color: #cfe8c8;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+.pd-title {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 3.2vw, 34px);
+  font-weight: 900;
+  line-height: 1.15;
+}
+.pd-maker {
+  display: inline-block;
+  color: #d7ffd0;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+.pd-maker:hover {
+  text-decoration: underline;
+}
+
+.pd-rating {
+  color: var(--muted);
+  margin: 4px 0 8px;
+}
+
+.pd-price {
+  font-size: clamp(22px, 2.9vw, 32px);
+  font-weight: 900;
+  color: #c8ff9e;
+  margin: 6px 0 8px;
+  text-shadow: 0 0 14px rgba(65, 246, 0, 0.14);
+}
+
+.pd-stock {
+  color: #e7e7e7;
+  margin-bottom: 12px;
+}
+.pd-blurb {
+  color: #ddd;
+  background: #121212;
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+/* ================== Qty ================== */
+.pd-qty {
+  margin: 14px 0 10px;
+}
+.pd-qty label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 800;
+  color: #dfead8;
+}
+
+.qty-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #121212;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 6px;
+  height: 48px;
+}
+.qty-minus,
+.qty-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #181818;
+  color: #eaeaea;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 800;
+  transition: transform 0.12s, filter 0.12s, box-shadow 0.12s;
+}
+.qty-minus:hover,
+.qty-plus:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.35);
+}
+.qty-minus:disabled,
+.qty-plus:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.qty-input {
+  width: 72px;
+  height: 38px;
+  text-align: center;
+  background: #101010;
+  color: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+/* ================== Add to cart ================== */
+.pd-actions {
+  margin-top: 12px;
+}
+.pd-actions .btn-add {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  border-radius: 12px;
+  font-weight: 900;
+  background: var(--primary);
+  color: var(--ink);
+  border: 1px solid var(--primary);
+  box-shadow: 0 12px 30px rgba(65, 246, 0, 0.2);
+  transition: transform 0.12s, filter 0.12s, box-shadow 0.12s;
+  text-decoration: none;
+}
+.pd-actions .btn-add:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 16px 36px rgba(65, 246, 0, 0.26);
+}
+.pd-actions .btn-add[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ================== Related ================== */
+.pd-related {
+  margin-top: 28px;
+}
+.section-title {
+  font-size: clamp(20px, 2.6vw, 28px);
+  font-weight: 900;
+  margin: 4px 0 12px;
+}
+
+.grid {
+  --col: 4;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(var(--col), minmax(0, 1fr));
+}
+@media (max-width: 1200px) {
+  .grid {
+    --col: 3;
+  }
+}
+@media (max-width: 900px) {
+  .grid {
+    --col: 2;
+  }
+}
+@media (max-width: 560px) {
+  .grid {
+    --col: 1;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  border-color: rgba(65, 246, 0, 0.45);
+}
+.card-media {
+  display: block;
+  background: linear-gradient(180deg, #a8ff78, #41f600);
+  height: 210px;
+  overflow: hidden;
+}
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.22s ease;
+}
+.card:hover .card-media img {
+  transform: scale(1.06);
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+.card-name {
+  margin: 0;
+  font-weight: 900;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.7em;
+}
+.card-name a {
+  color: #fff;
+  text-decoration: none;
+}
+.card:hover .card-name a {
+  color: #eaffd2;
+  text-decoration: underline;
+}
+.card-artist {
+  color: var(--muted);
+  font-size: 14px;
+  min-height: 1.5em;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-price {
+  margin-top: auto;
+  font-weight: 900;
+  color: #c8ff9e;
+}
